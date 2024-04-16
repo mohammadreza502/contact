@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="fa"> <!-- زبان فارسی -->
+<head>
+    <!-- متا تگ‌های موردنیاز -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700,900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="fonts/icomoon/style.css">
+    <!-- استایل‌های بوت استرپ -->
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <!-- استایل سفارشی -->
+    <link rel="stylesheet" href="css/style.css">
+    <title>فرم تماس با من</title>
+</head>
+<body>
+<div class="content">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-10">
+                <div class="row justify-content-center">
+                    <div class="col-md-6">
+                        <h3 class="heading mb-4">فرم تماس با من</h3>
+                        <p>جهت تماس با من لطفاً این فرم را تکمیل کنید تا با شما تماس بگیرم.</p>
+                        <p><img src="images/undraw-contact.svg" alt="تصویر" class="img-fluid"></p>
+                    </div>
+                    <div class="col-md-6">
+                        <form class="mb-5" id="contactForm">
+                            <div class="row">
+                                <div class="col-md-12 form-group">
+                                    <input type="text" class="form-control" id="name" placeholder="نام شما">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12 form-group">
+                                    <input type="text" class="form-control" id="phone" placeholder="شماره تلفن">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12 form-group">
+                                    <input type="text" class="form-control" id="subject" placeholder="موضوع">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12 form-group">
+                                    <textarea class="form-control" id="message" cols="30" rows="7" placeholder="پیام خود را بنویسید"></textarea>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <button type="button" onclick="sendMessage()" class="btn btn-primary rounded-0 py-2 px-4">ارسال پیام</button>
+                                    <span id="submitting" style="display: none;">در حال ارسال...</span>
+                                </div>
+                            </div>
+                        </form>
+                        <div id="form-message" class="mt-4"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function sendMessage() {
+        var name = document.getElementById('name').value;
+        var phone = document.getElementById('phone').value;
+        var subject = document.getElementById('subject').value;
+        var message = document.getElementById('message').value;
+
+        // اطلاعات را در قالب متنی آماده می‌کنیم
+        var textMessage = `
+            نام: ${name}
+            شماره تلفن: ${phone}
+            موضوع: ${subject}
+            پیام: ${message}
+        `;
+
+        // URL وب‌هوک دیسکورد خود را در اینجا قرار دهید
+        var webhookURL = 'https://discord.com/api/webhooks/1229774141079420968/fZX4mUaLMocVgHEVX537aIg6I6sKjmB2IzEHU1j23bLsdPnVNwiZHdZSapi-rUNo10I2';
+
+        // ارسال درخواست به وب‌هوک دیسکورد
+        fetch(webhookURL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ content: textMessage })
+        })
+        .then(response => {
+            if (response.ok) {
+                document.getElementById('form-message').innerText = 'پیام شما با موفقیت ارسال شد!';
+            } else {
+                document.getElementById('form-message').innerText = 'خطا در ارسال پیام.';
+            }
+        })
+        .catch(error => {
+            document.getElementById('form-message').innerText = 'خطا در ارسال پیام: ' + error.message;
+        });
+    }
+</script>
+
+</body>
+</html>
